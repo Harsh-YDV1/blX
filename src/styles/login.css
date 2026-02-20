@@ -1,0 +1,155 @@
+/* Full page layout */
+.login-page {
+  height: 100vh;
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* LEFT CULTURAL PANEL */
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 70px;
+}
+
+/* Namaste */
+.login-left h1 {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+
+.login-left h2 {
+  margin-bottom: 20px;
+}
+
+/* Intro paragraph */
+.intro-text {
+  font-size: 17px;
+  max-width: 420px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Cultural info boxes */
+.culture-box {
+  background: rgba(255,255,255,0.18);
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-top: 14px;
+  backdrop-filter: blur(3px);
+}
+
+.culture-box h3 {
+  margin-bottom: 6px;
+}
+
+.culture-box p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* RIGHT SIDE */
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff7ed;
+}
+
+/* Login card */
+.login-card {
+  background: white;
+  padding: 40px 35px;
+  width: 340px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  text-align: center;
+}
+
+/* Title */
+.login-title {
+  margin-bottom: 20px;
+  color: #ea580c;
+}
+
+/* Inputs */
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.2s;
+}
+
+.login-input:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 5px rgba(249,115,22,0.4);
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 8px;
+  background: #f97316;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.login-btn:hover {
+  background: #ea580c;
+}
+
+/* Toggle text */
+.login-toggle {
+  margin-top: 15px;
+  color: #f97316;
+  cursor: pointer;
+}
+
+/* Divider */
+.login-divider {
+  margin: 18px 0;
+  color: #999;
+}
+
+/* Google button */
+.google-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #111827;
+}
+
+.google-btn:hover {
+  background: #f3f4f6;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.google-btn span {
+  font-weight: 600;
+}

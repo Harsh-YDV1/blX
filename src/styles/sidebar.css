@@ -1,0 +1,138 @@
+/* Sidebar container */
+.sidebar {
+  width: 240px;              /* VERY IMPORTANT — defines sidebar boundary */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-right: 1px solid #eee;
+}
+
+/* Navigation links area */
+.sidebar nav {
+  padding: 10px 0;
+}
+
+/* Profile section at bottom */
+.sidebar-profile {
+  margin-top: auto;          /* pushes profile to bottom */
+  padding: 14px;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+/* Row: image + text */
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Circular profile image */
+.profile-pic {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f97316;
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+
+.profile-pic:hover {
+  transform: scale(1.05);
+}
+
+/* Text beside image */
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+/* Name */
+.profile-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Email */
+.profile-email {
+  font-size: 12px;
+  color: #666;
+  word-break: break-word;
+}
+
+/* Logout button */
+.logout-btn {
+  width: 100%;
+  padding: 7px;
+  border: none;
+  border-radius: 6px;
+  background: #f97316;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: #ea580c;
+}
+
+/* Sidebar link hover-only effects (visible only on cursor) */
+.sidebar nav a {
+  display: block;
+  padding: 11px 16px;
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 220ms ease, padding-left 220ms ease;
+  position: relative;
+  overflow: hidden;
+  border-left: 3px solid transparent;
+}
+
+.sidebar nav a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(249,115,22,0.06), rgba(234,88,12,0.04));
+  transition: width 220ms cubic-bezier(.2,.9,.2,1);
+  z-index: 0;
+}
+
+.sidebar nav a > * { position: relative; z-index: 1; }
+
+.sidebar nav a:hover::before { width: 100%; }
+
+.sidebar nav a::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-8px);
+  width: 6px;
+  height: 58%;
+  background: linear-gradient(180deg, #f97316, #ea580c);
+  border-radius: 4px;
+  opacity: 0;
+  transition: transform 220ms ease, opacity 220ms ease;
+  z-index: 1;
+}
+
+.sidebar nav a:hover::after { transform: translateY(-50%) translateX(0); opacity: 1; }
+
+.sidebar nav a:hover {
+  color: #f97316;
+  padding-left: 20px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+
+.sidebar nav a.active {
+  background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(234,88,12,0.04));
+  color: #f97316;
+  border-left-color: #f97316;
+}
