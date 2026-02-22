@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import DashboardLayout from "../layouts/DashboardLayout";
+import "../styles/sites.css";
 import useUserRole from "../hooks/useUserRole";
 import LikeCommentSection from "../components/LikeCommentSection";
 
@@ -10,6 +11,8 @@ function Traditions() {
   const { role } = useUserRole();
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchTraditions = async () => {
@@ -34,32 +37,56 @@ function Traditions() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-traditions">
       <h1>Cultural Traditions</h1>
 
-      <div style={{ display: "flex", gap: 16, marginTop: 12, flexWrap: "wrap" }}>
-        <label>
-          Filter by Region:
-          <select value={selectedRegion} onChange={(e)=>setSelectedRegion(e.target.value)} style={{ marginLeft: 8 }}>
-            <option value="">All Regions</option>
-            {[...new Set(traditions.map(t=>t.region).filter(Boolean))].sort().map(r => (
-              <option key={r} value={r}>{r}</option>
-            ))}
-          </select>
-        </label>
+      <div className="sites-filter-section">
+        <input
+          className="search-box search-input"
+          placeholder="Search by name or region..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-        <label>
-          Filter by Category:
-          <select value={selectedCategory} onChange={(e)=>setSelectedCategory(e.target.value)} style={{ marginLeft: 8 }}>
-            <option value="">All Categories</option>
-            {[...new Set(traditions.map(t=>t.category).filter(Boolean))].sort().map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-        </label>
+        <div className="filter-dropdown-wrapper">
+          <button className="filter-dropdown-btn" onClick={() => setShowFilters(s => !s)}>Filters ▾</button>
+
+          {showFilters && (
+            <div className="filter-content">
+              <label>
+                Region
+                <select className="filter-select" value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
+                  <option value="">All Regions</option>
+                  {[...new Set(traditions.map(t => t.region).filter(Boolean))].sort().map(r => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Category
+                <select className="filter-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                  <option value="">All Categories</option>
+                  {[...new Set(traditions.map(t => t.category).filter(Boolean))].sort().map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          )}
+        </div>
       </div>
 
-      {traditions.filter(t => (!selectedRegion || t.region === selectedRegion) && (!selectedCategory || t.category === selectedCategory)).map(tradition => (
+      {traditions.filter(t => {
+        const matchesRegion = !selectedRegion || t.region === selectedRegion;
+        const matchesCategory = !selectedCategory || t.category === selectedCategory;
+        const term = (searchTerm || "").toLowerCase();
+        const name = (t.name || "").toLowerCase();
+        const location = (t.region || "").toLowerCase();
+        const matchesSearch = !term || name.includes(term) || location.includes(term);
+
+        return matchesRegion && matchesCategory && matchesSearch;
+      }).map(tradition => (
         <div key={tradition.id} style={{
           background: "#fff",
           padding: 16,

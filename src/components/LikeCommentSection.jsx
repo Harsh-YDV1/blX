@@ -7,6 +7,7 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { AuthContext } from "../context/AuthContext";
@@ -21,46 +22,45 @@ function LikeCommentSection({ itemId, itemType }) {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Fetch likes and comments
+  // Fetch likes and comments with real-time updates
   useEffect(() => {
-    fetchLikes();
-    fetchComments();
-  }, [itemId, itemType, user]);
+    const q = query(
+      collection(db, "likes"),
+      where("itemId", "==", itemId),
+      where("itemType", "==", itemType)
+    );
 
-  const fetchLikes = async () => {
-    try {
-      const q = query(
-        collection(db, "likes"),
-        where("itemId", "==", itemId),
-        where("itemType", "==", itemType)
-      );
-      const snap = await getDocs(q);
+    const unsubscribeLikes = onSnapshot(q, (snap) => {
       setLikeCount(snap.size);
 
       if (user) {
         const userLike = snap.docs.find((d) => d.data().userEmail === user.email);
         setIsLiked(!!userLike);
       }
-    } catch (err) {
+    }, (err) => {
       console.error("Error fetching likes:", err);
-    }
-  };
+    });
 
-  const fetchComments = async () => {
-    try {
-      const q = query(
-        collection(db, "itemComments"),
-        where("itemId", "==", itemId),
-        where("itemType", "==", itemType)
-      );
-      const snap = await getDocs(q);
+    return () => unsubscribeLikes();
+  }, [itemId, itemType, user]);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "itemComments"),
+      where("itemId", "==", itemId),
+      where("itemType", "==", itemType)
+    );
+
+    const unsubscribeComments = onSnapshot(q, (snap) => {
       setComments(
         snap.docs.map((d) => ({ id: d.id, ...d.data() }))
       );
-    } catch (err) {
+    }, (err) => {
       console.error("Error fetching comments:", err);
-    }
-  };
+    });
+
+    return () => unsubscribeComments();
+  }, [itemId, itemType]);
 
   const handleLike = async () => {
     if (!user) {
@@ -79,8 +79,7 @@ function LikeCommentSection({ itemId, itemType }) {
         );
         const snap = await getDocs(q);
         snap.docs.forEach((d) => deleteDoc(d.ref));
-        setIsLiked(false);
-        setLikeCount((prev) => prev - 1);
+        // Don't manually update - let onSnapshot handle it
       } else {
         // Like
         await addDoc(collection(db, "likes"), {
@@ -91,8 +90,7 @@ function LikeCommentSection({ itemId, itemType }) {
           userPhotoURL: user.photoURL,
           timestamp: new Date(),
         });
-        setIsLiked(true);
-        setLikeCount((prev) => prev + 1);
+        // Don't manually update - let onSnapshot handle it
       }
     } catch (err) {
       console.error("Error toggling like:", err);
@@ -122,7 +120,7 @@ function LikeCommentSection({ itemId, itemType }) {
       setNewComment("");
       await fetchComments();
     } catch (err) {
-      console.error("Error adding comment:", err);
+      // onSnapshot will automatically update commentsdding comment:", err);
       alert("Failed to post comment");
     } finally {
       setLoading(false);
@@ -139,7 +137,7 @@ function LikeCommentSection({ itemId, itemType }) {
 
     try {
       await deleteDoc(doc(db, "itemComments", commentId));
-      await fetchComments();
+      // onSnapshot will automatically update comments
     } catch (err) {
       console.error("Error deleting comment:", err);
     }

@@ -45,7 +45,7 @@ function AddSite() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-addsite">
       <div className="form-page">
         <div className="form-card">
           <h2 className="form-title">Add Heritage Site</h2>

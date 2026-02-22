@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import DashboardLayout from "../layouts/DashboardLayout";
+import "../styles/sites.css";
 import useUserRole from "../hooks/useUserRole";
 import LikeCommentSection from "../components/LikeCommentSection";
 
 function StateSymbols() {
   const [symbols, setSymbols] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const { role } = useUserRole();
 
   useEffect(() => {
@@ -34,32 +37,56 @@ function StateSymbols() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-statesymbols">
       <h2>State Symbols</h2>
 
-      <div style={{ display: "flex", gap: 16, marginTop: 12, flexWrap: "wrap" }}>
-        <label>
-          Filter by State:
-          <select value={selectedState} onChange={(e)=>setSelectedState(e.target.value)} style={{ marginLeft: 8 }}>
-            <option value="">All States</option>
-            {[...new Set(symbols.map(s=>s.stateName).filter(Boolean))].sort().map(st => (
-              <option key={st} value={st}>{st}</option>
-            ))}
-          </select>
-        </label>
+      <div className="sites-filter-section">
+        <input
+          className="search-box search-input"
+          placeholder="Search by name or state..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-        <label>
-          Filter by Type:
-          <select value={selectedType} onChange={(e)=>setSelectedType(e.target.value)} style={{ marginLeft: 8 }}>
-            <option value="">All Types</option>
-            {[...new Set(symbols.map(s=>s.symbolType).filter(Boolean))].sort().map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-        </label>
+        <div className="filter-dropdown-wrapper">
+          <button className="filter-dropdown-btn" onClick={() => setShowFilters(s => !s)}>Filters ▾</button>
+
+          {showFilters && (
+            <div className="filter-content">
+              <label>
+                State
+                <select className="filter-select" value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
+                  <option value="">All States</option>
+                  {[...new Set(symbols.map(s => s.stateName).filter(Boolean))].sort().map(st => (
+                    <option key={st} value={st}>{st}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Type
+                <select className="filter-select" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                  <option value="">All Types</option>
+                  {[...new Set(symbols.map(s => s.symbolType).filter(Boolean))].sort().map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          )}
+        </div>
       </div>
 
-      {symbols.filter(s => (!selectedState || s.stateName === selectedState) && (!selectedType || s.symbolType === selectedType)).map(symbol => (
+      {symbols.filter(s => {
+        const matchesState = !selectedState || s.stateName === selectedState;
+        const matchesType = !selectedType || s.symbolType === selectedType;
+        const term = (searchTerm || "").toLowerCase();
+        const name = (s.symbolName || "").toLowerCase();
+        const location = (s.stateName || "").toLowerCase();
+        const matchesSearch = !term || name.includes(term) || location.includes(term);
+
+        return matchesState && matchesType && matchesSearch;
+      }).map(symbol => (
         <div
           key={symbol.id}
           style={{

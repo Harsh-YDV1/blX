@@ -1,0 +1,320 @@
+/* Sites Filter Section */
+.sites-filter-section {
+  display: flex;
+  gap: 16px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+/* Search Box */
+.search-box {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #333;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  height: 48px;
+  box-sizing: border-box;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-input:hover {
+  border-color: #f97316;
+  background-color: rgba(255, 251, 247, 0.7);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 16px;
+  color: #999;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Main Filter Group */
+.main-filter-group {
+  flex: 0 1 auto;
+  position: relative;
+  min-width: 200px;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Filter Dropdown Button */
+.filter-dropdown-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.65) 0%, rgba(251, 146, 60, 0.65) 100%);
+  color: white;
+  border: 2px solid #f97316;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
+  position: relative;
+  overflow: hidden;
+  height: 48px;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.filter-dropdown-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.filter-dropdown-btn:hover {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.78) 0%, rgba(249, 115, 22, 0.78) 100%);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.22);
+  transform: translateY(-2px);
+}
+
+.filter-dropdown-btn:hover::before {
+  left: 100%;
+}
+
+.filter-dropdown-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
+}
+
+/* Dropdown Arrow */
+.dropdown-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Filter Content */
+.filter-content {
+  background: white;
+  border: 2px solid #f97316;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 16px;
+  animation: slideDown 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Filter Row */
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Filter Label */
+.filter-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+}
+
+.filter-label.full-width {
+  grid-column: 1 / -1;
+}
+
+.filter-label span {
+  color: #555;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Filter Select */
+.filter-select {
+  padding: 10px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  padding-right: 32px;
+}
+
+.filter-select:hover {
+  border-color: #f97316;
+  background-color: #fffbf7;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  background-color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sites-filter-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-box {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .search-input {
+    padding: 10px 14px 10px 36px;
+    font-size: 13px;
+  }
+
+  .search-icon {
+    left: 10px;
+    font-size: 14px;
+  }
+
+  .main-filter-group {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-dropdown-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .filter-content {
+    padding: 12px;
+  }
+}
+
+/* Sites Card */
+.site-card {
+  background: white;
+  padding: 16px;
+  margin-top: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.site-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.site-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.site-card h3 {
+  margin: 12px 0 8px 0;
+  color: #f97316;
+  font-size: 18px;
+}
+
+.site-card p {
+  margin: 6px 0;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.site-card p b {
+  color: #333;
+}
+
+/* No Results Message */
+.no-results {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(251, 146, 60, 0.08) 100%);
+  border: 2px dashed #f97316;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  margin: 24px 0;
+}
+
+.no-results p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.no-results p:first-child {
+  font-size: 24px;
+  font-weight: 600;
+  color: #f97316;
+}
+

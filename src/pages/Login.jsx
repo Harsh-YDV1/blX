@@ -16,12 +16,15 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isRegister, setIsRegister] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showSignUp, setShowSignUp] = useState(false);
 
   // 🔐 Google Login
   const googleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      provider.setDefaultLanguage("en");
       const result = await signInWithPopup(auth, provider);
 
       const userRef = doc(db, "users", result.user.uid);
@@ -37,28 +40,65 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err) {
+      console.error("Google login error:", err);
+      if (err.code === 'auth/operation-not-allowed') {
+        alert("Google sign-in is not enabled. Please contact Admin.");
+      } else if (err.code === 'auth/popup-blocked') {
+        alert("Popup was blocked. Please allow popups and try again.");
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        alert("Sign-in cancelled.");
+      } else {
+        alert("Google Sign-in failed: " + err.message);
+      }
+    }
+  };
+
+  // 📧 Email Login
+  const handleLogin = async () => {
+    try {
+      if (!email || !password) {
+        alert("Please enter email and password");
+        return;
+      }
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard");
+    } catch (err) {
       alert(err.message);
     }
   };
 
-  // 📧 Email Login or Register
-  const emailAuth = async () => {
+  // 📝 Email Sign Up
+  const handleSignUp = async () => {
     try {
-      let result;
-
-      if (isRegister) {
-        result = await createUserWithEmailAndPassword(auth, email, password);
-
-        await setDoc(doc(db, "users", result.user.uid), {
-          name: email.split("@")[0],
-          email,
-          role: "enthusiast"
-        });
-      } else {
-        result = await signInWithEmailAndPassword(auth, email, password);
+      if (!fullName || !email || !password || !confirmPassword) {
+        alert("Please fill all fields");
+        return;
       }
 
-      navigate("/dashboard");
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+      }
+
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+
+      await setDoc(doc(db, "users", result.user.uid), {
+        name: fullName,
+        email,
+        role: "enthusiast"
+      });
+
+      alert("Account created successfully! Please login.");
+      setShowSignUp(false);
+      setFullName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
     } catch (err) {
       alert(err.message);
     }
@@ -105,43 +145,106 @@ function Login() {
       {/* RIGHT LOGIN CARD */}
       <div className="login-right">
         <div className="login-card">
+          
+          {/* LOGIN FORM */}
+          {!showSignUp ? (
+            <>
+              <h2 className="login-title">Namaskaram!</h2>
 
-          <h2 className="login-title">
-            {isRegister ? "Create Account" : "Namaskaram!"}
-          </h2>
+              {/* Toggle Buttons */}
+              <div className="auth-toggle-buttons">
+                <button 
+                  className={`toggle-btn ${!showSignUp ? 'active' : ''}`}
+                  onClick={() => setShowSignUp(false)}
+                >
+                  Login
+                </button>
+                <button 
+                  className={`toggle-btn ${showSignUp ? 'active' : ''}`}
+                  onClick={() => setShowSignUp(true)}
+                >
+                  Sign Up
+                </button>
+              </div>
 
-          {/* Email */}
-          <input
-            className="login-input"
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+              <input
+                className="login-input"
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-          {/* Password */}
-          <input
-            className="login-input"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+              <input
+                className="login-input"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
-          {/* Login/Register */}
-          <button className="login-btn" onClick={emailAuth}>
-            {isRegister ? "Register" : "Login"}
-          </button>
+              <button className="login-btn" onClick={handleLogin}>
+                Login
+              </button>
+            </>
+          ) : (
+            /* SIGN UP FORM */
+            <>
+              <h2 className="login-title">Create Account</h2>
 
-          {/* Toggle */}
-          <p
-            className="login-toggle"
-            onClick={() => setIsRegister(!isRegister)}
-          >
-            {isRegister
-              ? "Already have an account? Login"
-              : "New user? Register here"}
-          </p>
+              {/* Toggle Buttons */}
+              <div className="auth-toggle-buttons">
+                <button 
+                  className={`toggle-btn ${!showSignUp ? 'active' : ''}`}
+                  onClick={() => setShowSignUp(false)}
+                >
+                  Login
+                </button>
+                <button 
+                  className={`toggle-btn ${showSignUp ? 'active' : ''}`}
+                  onClick={() => setShowSignUp(true)}
+                >
+                  Sign Up
+                </button>
+              </div>
+
+              <input
+                className="login-input"
+                type="text"
+                placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+
+              <input
+                className="login-input"
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <input
+                className="login-input"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <input
+                className="login-input"
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+
+              <button className="login-btn" onClick={handleSignUp}>
+                Sign Up
+              </button>
+            </>
+          )}
 
           <div className="login-divider">OR</div>
 

@@ -8,18 +8,45 @@
 /* LEFT CULTURAL PANEL */
 .login-left {
   flex: 1;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 50%, #fbbf24 100%),
+              url('https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?w=800&h=800&fit=crop') center/cover;
+  background-blend-mode: overlay;
+  background-attachment: fixed;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 70px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background pattern overlay */
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.login-left > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* Namaste */
 .login-left h1 {
   font-size: 56px;
   margin-bottom: 8px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .login-left h2 {
@@ -32,19 +59,29 @@
   max-width: 420px;
   line-height: 1.6;
   margin-bottom: 20px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Cultural info boxes */
 .culture-box {
-  background: rgba(255,255,255,0.18);
-  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 16px 18px;
   border-radius: 10px;
   margin-top: 14px;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.culture-box:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 
 .culture-box h3 {
   margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .culture-box p {
@@ -58,7 +95,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff7ed;
+  background: linear-gradient(135deg, rgba(250, 250, 250, 0.95) 0%, rgba(255, 247, 240, 0.95) 100%),
+              url('https://images.unsplash.com/photo-1582649591388-f43c315e0db9?w=800&h=800&fit=crop') center/cover fixed;
+  background-blend-mode: lighten;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle pattern background */
+.login-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(249, 115, 22, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.03) 0%, transparent 50%);
+  z-index: 0;
+}
+
+.login-right > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Login card */
@@ -67,8 +127,40 @@
   padding: 40px 35px;
   width: 340px;
   border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+/* Toggle buttons for Login/Sign Up */
+.auth-toggle-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-btn:hover {
+  border-color: #f97316;
+  color: #f97316;
+}
+
+.toggle-btn.active {
+  background: #f97316;
+  color: white;
+  border-color: #f97316;
 }
 
 /* Title */

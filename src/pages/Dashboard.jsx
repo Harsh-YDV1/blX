@@ -35,54 +35,104 @@ function Dashboard() {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-dashboard">
       <div className="dashboard-content">
-        <div className="dashboard-welcome">
-          <h1>नमस्ते 🌸</h1>
-          <p>Welcome back, <strong>{user?.displayName || "Explorer"}</strong></p>
+        <div className="hero-section">
+          <div className="hero-background">
+            <h1 className="hero-title">नमस्ते, {user?.displayName || "Explorer"}! 🌸</h1>
+            <p className="hero-subtitle">Welcome to Bharat Legacy Explorer - Discover India's Rich Cultural Heritage</p>
+          </div>
         </div>
 
-        <div className="stats-row">
+        <div className="stats-container">
           <div className="stat-card">
-            <div className="icon">🏛️</div>
-            <h2>{siteCount}</h2>
+            <span className="stat-icon">🏛️</span>
+            <h3>{siteCount}</h3>
             <p>Heritage Sites</p>
           </div>
 
           <div className="stat-card">
-            <div className="icon">🎭</div>
-            <h2>{traditionCount}</h2>
+            <span className="stat-icon">🎭</span>
+            <h3>{traditionCount}</h3>
             <p>Cultural Traditions</p>
           </div>
 
           <div className="stat-card">
-            <div className="icon">👑</div>
-            <h2>{symbolCount}</h2>
+            <span className="stat-icon">👑</span>
+            <h3>{symbolCount}</h3>
             <p>State Symbols</p>
+          </div>
+
+          <div className="stat-card">
+            <span className="stat-icon">📚</span>
+            <h3>Community</h3>
+            <p>Learning Hub</p>
           </div>
         </div>
 
-        <div className="section">
-          <h2>Quick Overview</h2>
-          <div className="content-card">
+        <div className="quick-access-section">
+          <h2>Explore by Category</h2>
+          <div className="quick-access-grid">
+            <a href="/sites" className="quick-access-card">
+              <div className="access-icon">🏰</div>
+              <h3>Heritage Sites</h3>
+              <p>Ancient monuments & historical places</p>
+            </a>
+
+            <a href="/traditions" className="quick-access-card">
+              <div className="access-icon">🎪</div>
+              <h3>Cultural Traditions</h3>
+              <p>Festivals, rituals & customs</p>
+            </a>
+
+            <a href="/state-symbols" className="quick-access-card">
+              <div className="access-icon">🎨</div>
+              <h3>State Symbols</h3>
+              <p>Unique heritage of each state</p>
+            </a>
+
+            <a href="/guides" className="quick-access-card">
+              <div className="access-icon">📖</div>
+              <h3>Expert Guides</h3>
+              <p>Learn from heritage specialists</p>
+            </a>
+          </div>
+        </div>
+
+        <div className="about-section">
+          <h2>About Our Platform</h2>
+          <div className="about-content">
             <p>
-             Bharat Legacy Explorer is a full-stack web application designed to promote awareness and learning about India’s rich cultural heritage, historical places, and traditional symbols. The platform allows users to securely sign in using Google or email authentication and explore detailed information about heritage sites, cultural traditions, and state symbols through an interactive dashboard. It supports multiple user roles—Admin, Content Creator, Tour Guide, and Cultural Enthusiast—each with specific permissions such as managing content, adding new heritage entries, conducting virtual tours, or participating in discussions.
+              Bharat Legacy Explorer is a comprehensive platform dedicated to preserving and promoting awareness about India's incredible cultural heritage. Our mission is to connect people with the rich history, traditions, and symbols that make India unique.
             </p>
+            <div className="about-features">
+              <div className="feature">
+                <span>🔐</span>
+                <h4>Secure Access</h4>
+                <p>Safe & secure authentication</p>
+              </div>
+              <div className="feature">
+                <span>📱</span>
+                <h4>User Roles</h4>
+                <p>Multiple roles for different users</p>
+              </div>
+              <div className="feature">
+                <span>💬</span>
+                <h4>Community Driven</h4>
+                <p>Share & discuss cultural topics</p>
+              </div>
+              <div className="feature">
+                <span>🌏</span>
+                <h4>All-India Content</h4>
+                <p>Heritage from all 28 states</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </DashboardLayout>
   );
 }
-
-const cardStyle = {
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "12px",
-  width: "220px",
-  textAlign: "center",
-  boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
-};
 
 const countStyle = {
   fontSize: "32px",

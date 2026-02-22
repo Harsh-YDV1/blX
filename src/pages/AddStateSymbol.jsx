@@ -41,7 +41,7 @@ function AddStateSymbol() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-addstatesymbol">
       <div className="form-page">
         <div className="form-card">
           <h2 className="form-title">Add State Symbol</h2>

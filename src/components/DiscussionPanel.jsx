@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, query, orderBy, serverTimestamp, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/discussion.css";
@@ -11,25 +11,20 @@ function DiscussionPanel() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Fetch comments
+  // Fetch comments with real-time updates
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const q = query(
-          collection(db, "culturalComments"),
-          orderBy("timestamp", "desc")
-        );
-        const snap = await getDocs(q);
-        setComments(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      } catch (err) {
-        console.error("Error fetching comments:", err);
-      }
-    };
+    const q = query(
+      collection(db, "culturalComments"),
+      orderBy("timestamp", "desc")
+    );
 
-    fetchComments();
-    // Refresh comments every 5 seconds
-    const interval = setInterval(fetchComments, 5000);
-    return () => clearInterval(interval);
+    const unsubscribe = onSnapshot(q, (snap) => {
+      setComments(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    }, (err) => {
+      console.error("Error fetching comments:", err);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   // Add comment
@@ -48,13 +43,7 @@ function DiscussionPanel() {
       });
 
       setNewComment("");
-      // Refresh comments immediately after adding
-      const q = query(
-        collection(db, "culturalComments"),
-        orderBy("timestamp", "desc")
-      );
-      const snap = await getDocs(q);
-      setComments(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      // onSnapshot will automatically update the comments list
     } catch (err) {
       console.error("Error adding comment:", err);
       alert("Failed to post comment");

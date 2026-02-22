@@ -34,7 +34,7 @@ function AddTradition() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-addtradition">
       <div className="form-page">
         <div className="form-card">
           <h2 className="form-title">Add Cultural Tradition</h2>

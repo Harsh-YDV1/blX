@@ -58,7 +58,7 @@ function AddGuide() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-addguide">
       <div className="form-page">
         <div className="form-card">
           <h2 className="form-title">Add Guide</h2>

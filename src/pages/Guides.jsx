@@ -4,12 +4,15 @@ import { db } from "../firebase/firebaseConfig";
 import DashboardLayout from "../layouts/DashboardLayout";
 import useUserRole from "../hooks/useUserRole";
 import "../styles/guides.css";
+import "../styles/sites.css";
 
 function Guides() {
   const [guides, setGuides] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("");
   const { role } = useUserRole();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchGuides = async () => {
@@ -37,51 +40,59 @@ function Guides() {
     }
   };
 
-  const filteredGuides = guides.filter(
-    (guide) =>
-      (!selectedCity || guide.city === selectedCity) &&
-      (!selectedSpecialty || guide.specialty === selectedSpecialty)
-  );
+  const filteredGuides = guides.filter((guide) => {
+    const matchesCity = !selectedCity || guide.city === selectedCity;
+    const matchesSpecialty = !selectedSpecialty || guide.specialty === selectedSpecialty;
+    const term = (searchTerm || "").toLowerCase();
+    const name = (guide.name || "").toLowerCase();
+    const location = (guide.city || "").toLowerCase();
+    const matchesSearch = !term || name.includes(term) || location.includes(term);
+
+    return matchesCity && matchesSpecialty && matchesSearch;
+  });
 
   const cities = [...new Set(guides.map((g) => g.city).filter(Boolean))].sort();
   const specialties = [...new Set(guides.map((g) => g.specialty).filter(Boolean))].sort();
 
   return (
-    <DashboardLayout>
+    <DashboardLayout bgClass="page-guides">
       <h2>Find a Guide</h2>
 
-      <div className="filter-container">
-        <label>
-          Filter by City:
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">All Cities</option>
-            {cities.map((city) => (
-              <option key={city} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </label>
+      <div className="sites-filter-section">
+        <input
+          className="search-box search-input"
+          placeholder="Search by name or city..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-        <label>
-          Filter by Specialty:
-          <select
-            value={selectedSpecialty}
-            onChange={(e) => setSelectedSpecialty(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">All Specialties</option>
-            {specialties.map((specialty) => (
-              <option key={specialty} value={specialty}>
-                {specialty}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="filter-dropdown-wrapper">
+          <button className="filter-dropdown-btn" onClick={() => setShowFilters(s => !s)}>Filters ▾</button>
+
+          {showFilters && (
+            <div className="filter-content">
+              <label>
+                City
+                <select className="filter-select" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
+                  <option value="">All Cities</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Specialty
+                <select className="filter-select" value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
+                  <option value="">All Specialties</option>
+                  {specialties.map((specialty) => (
+                    <option key={specialty} value={specialty}>{specialty}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          )}
+        </div>
       </div>
 
       {filteredGuides.length === 0 ? (
